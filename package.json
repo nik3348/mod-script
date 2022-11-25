@@ -1,0 +1,14 @@
+{
+  "name": "mod-script",
+  "version": "1.0.0",
+  "description": "Example of creating a function that runs as a cron job using the serverless `schedule` event",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1261.0",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "serverless-ssm-fetch": "^2.0.0"
+  }
+}

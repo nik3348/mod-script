@@ -1,0 +1,59 @@
+service: mod-script
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  region: us-west-2
+  runtime: nodejs14.x
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - ssm:GetParameters
+            - ssm:GetParameter
+            - ssm:DescribeParameters
+            - kms:Encrypt
+            - kms:Decrypt
+          Resource: "*"
+        - Effect: Allow # note that these rights are given in the default policy and are required if you want logs out of your lambda(s)
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource: "*"
+  vpc:
+    securityGroupIds:
+      - Ref: LambdaSecurityGroup
+    subnetIds:
+      - subnet-03874c0c03ed00ffd
+      - subnet-0359cc32d1df1f39e
+
+functions:
+  cronHandler:
+    handler: handler.run
+    events:
+      # Invoke Lambda function every 2nd minute from Mon-Fri
+      - schedule: cron(0/2 * ? * MON-FRI *)
+    timeout: 900
+
+resources:
+  - Resources:
+      LambdaSecurityGroup:
+        Type: AWS::EC2::SecurityGroup
+        Properties:
+          GroupDescription: Security group for cockpit lambda
+          GroupName: Cockpit lambda security group
+          SecurityGroupEgress:
+            - IpProtocol: -1
+              CidrIp: 0.0.0.0/0
+          SecurityGroupIngress:
+            - IpProtocol: tcp
+              FromPort: 80
+              ToPort: 80
+              CidrIp: 0.0.0.0/0
+            - IpProtocol: tcp
+              FromPort: 443
+              ToPort: 443
+              CidrIp: 0.0.0.0/0
+          VpcId: vpc-004713ac42c5d8edd
