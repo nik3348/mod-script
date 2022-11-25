@@ -26,15 +26,18 @@ provider:
     securityGroupIds:
       - Ref: LambdaSecurityGroup
     subnetIds:
-      - subnet-03874c0c03ed00ffd
-      - subnet-0359cc32d1df1f39e
+      - subnet-04417dd7e66d22d00
+      - subnet-080ce7a7b76dea813
 
 functions:
   cronHandler:
     handler: handler.run
     events:
       # Invoke Lambda function every 2nd minute from Mon-Fri
-      - schedule: cron(0/2 * ? * MON-FRI *)
+      - schedule: cron(0/1 * ? * MON-FRI *)
+      # - httpApi:
+      #     method: GET
+      #     path: /
     timeout: 900
 
 resources:
@@ -42,8 +45,8 @@ resources:
       LambdaSecurityGroup:
         Type: AWS::EC2::SecurityGroup
         Properties:
-          GroupDescription: Security group for cockpit lambda
-          GroupName: Cockpit lambda security group
+          GroupDescription: Security group for mod-script lambda
+          GroupName: mod-script lambda security group
           SecurityGroupEgress:
             - IpProtocol: -1
               CidrIp: 0.0.0.0/0
@@ -56,4 +59,4 @@ resources:
               FromPort: 443
               ToPort: 443
               CidrIp: 0.0.0.0/0
-          VpcId: vpc-004713ac42c5d8edd
+          VpcId: vpc-0d2edbfd7cb950072
