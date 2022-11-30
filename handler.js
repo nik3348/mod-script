@@ -62,7 +62,7 @@ module.exports.run = async (event, context, callback) => {
       COALESCE(pcr_event_count, 0) = 0 AND
       DATE_PART('day', now() - time_notified ) > 31 AND
       utr.user_id IS NULL
-      LIMIT 10
+      LIMIT 20
     `);
     console.log(result);
 
@@ -85,8 +85,8 @@ module.exports.run = async (event, context, callback) => {
         SELECT id from temp_pcr_id
       );
     `);
+  
     console.log(result);
-
     console.log("EXIT")
     return callback(null);
   } catch (ex) {
