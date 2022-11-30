@@ -85,7 +85,7 @@ module.exports.run = async (event, context, callback) => {
         SELECT id from temp_pcr_id
       );
     `);
-  
+
     console.log(result);
     console.log("EXIT")
     return callback(null);
